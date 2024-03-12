@@ -43,8 +43,8 @@ namespace Aula03Colecoes
                 Console.WriteLine("O CPF do funcionário não pode ser vazio.");
             }
 
-            ValidarCpf(func);
-            ValidarNome(func);
+            ValidarCpf(func.Cpf);
+            ValidarNome(func.Nome);
             ValidarSalarioAdmissao(func);
         }
         public static void CriarLista()
@@ -157,26 +157,66 @@ namespace Aula03Colecoes
             }
             return true;
         }
-        public static Boolean ValidarNome(Funcionario func)
+        public static Boolean ValidarNome(string nome)
         {
-            if (func.Nome.Length <= 2)
+            if (nome.Length <= 2)
             {
                 Console.WriteLine("O nome inserido é menor ou igual a 2 caracteres.");
                 return false;
             }
             return true;
         }
-        public static Boolean ValidarCpf(Funcionario func)
+        public static Boolean ValidarCpf(string cpf)
         {
-            if (func.Cpf.Length == 11)
+            if (cpf.Length == 11)
                 return true;
             else
                 return false;
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("");
+            Console.WriteLine("=====================================");
+            Console.WriteLine("***** AULA 03 LISTAS E COLEÇÕES *****");
+            Console.WriteLine("=====================================");
             CriarLista();
+            
+            int opcao = 0;
+            do {
+                Console.WriteLine("============================================");
+                Console.WriteLine("*** Digite o número da opção que deseja: ***");
+                Console.WriteLine("============================================");
+                Console.WriteLine("1 - Adicionar funcionário");
+                Console.WriteLine("2 - Exibir lista");
+                Console.WriteLine("3 - Função Obter por nome");
+                Console.WriteLine("4 - Função Obter Funcionários Recentes");
+                Console.WriteLine("5 - Função Obter Estatísticas");
+                Console.WriteLine("6 - Função Validar Salário Admissão");
+                Console.WriteLine("7 - Função Validar Nome");
+                Console.WriteLine("8 - Função Obter por Tipo");
+
+                opcao = int.Parse(Console.ReadLine());
+                switch (opcao) {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    default:
+                        Console.WriteLine("Saindo do sistema...");
+                        break;
+                }
+            } while(opcao > 0 && opcao < 9);
         }
 
     }
