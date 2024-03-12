@@ -8,6 +8,8 @@ namespace Aula03Colecoes
     class Program
     {
         static List<Funcionario> lista = new List<Funcionario>();
+        static bool funcionando = false;
+
         public static void AdicionarFuncionário()
         {
             Funcionario func = new Funcionario();
@@ -43,9 +45,15 @@ namespace Aula03Colecoes
                 Console.WriteLine("O CPF do funcionário não pode ser vazio.");
             }
 
-            ValidarCpf(func.Cpf);
+            ;
             ValidarNome(func.Nome);
             ValidarSalarioAdmissao(func);
+
+            if(!ValidarCpf(func.Cpf)) {
+                Console.WriteLine("CPF inválido.");
+            }
+
+            lista.Add(func);
         }
         public static void CriarLista()
         {
@@ -62,7 +70,7 @@ namespace Aula03Colecoes
             f2.Id = 2;
             f2.Nome = "Cristiano Ronaldo";
             f2.Cpf = "01987654321";
-            f2.DataAdmissao = DateTime.Parse("30/06/2002");
+            f2.DataAdmissao = DateTime.Parse("30/10/2026");
             f2.Salario = 150.00M;
             f2.TipoFuncionario = TipoFuncionarioEnum.CLT;
             lista.Add(f2);
@@ -103,7 +111,7 @@ namespace Aula03Colecoes
             f6.TipoFuncionario = TipoFuncionarioEnum.CLT;
             lista.Add(f6);
         }
-        public static void ExibirLista()
+        public static void ExibirLista(List<Funcionario> lista)
         {
             string dados = "";
             for (int i = 0; i < lista.Count; i++)
@@ -121,13 +129,15 @@ namespace Aula03Colecoes
         }
         public static void ObterPorNome(string nome)
         {
-            lista = lista.FindAll(x => x.Nome.ToLower() == nome);
-            ExibirLista();
+            List<Funcionario> listaFiltrada = new List<Funcionario>();
+            listaFiltrada = lista.FindAll(x => x.Nome == nome);
+            ExibirLista(listaFiltrada);
         }
         public static void ObterRecentes()
         {
-            lista = lista.OrderByDescending(x => x.Id).ToList();
-            ExibirLista();
+            List<Funcionario> listaFiltrada = new List<Funcionario>();
+            listaFiltrada = lista.OrderByDescending(x => x.Id).ToList();
+            ExibirLista(listaFiltrada);
         }
         public static void ObterEstatisticas()
         {
@@ -140,8 +150,13 @@ namespace Aula03Colecoes
         }
         public static void ObterPorTipo(TipoFuncionarioEnum tipo)
         {
-            lista = lista.FindAll(x => x.TipoFuncionario == tipo);
-            ExibirLista();
+            if(tipo == TipoFuncionarioEnum.Invalido) {
+                Console.WriteLine("Tipo inválido");
+                return;
+            }
+            List<Funcionario> listaFiltrada = new List<Funcionario>();
+            listaFiltrada = lista.FindAll(x => x.TipoFuncionario == tipo);
+            ExibirLista(listaFiltrada);
         }
         public static Boolean ValidarSalarioAdmissao(Funcionario func)
         {
@@ -152,7 +167,7 @@ namespace Aula03Colecoes
             }
             if (func.DataAdmissao < DateTime.Today)
             {
-                Console.WriteLine("A data de admissão não pode ser menor do que o dia atual.\nOu", func.Salario);
+                Console.WriteLine("A data de admissão não pode ser menor do que o dia atual.", func.Salario);
                 return false;
             }
             return true;
@@ -173,15 +188,22 @@ namespace Aula03Colecoes
             else
                 return false;
         }
+        private static void QuerContinuar()
+        {
+            Console.WriteLine("Quer continuar?\n1 - Sim\n2 - Não");
+            int continuar = int.Parse(Console.ReadLine());
+            if(continuar == 1) {
+                funcionando = true;
+            } else {
+                funcionando = false;
+            }
+        }
         static void Main(string[] args)
         {
-            Console.WriteLine("=====================================");
-            Console.WriteLine("***** AULA 03 LISTAS E COLEÇÕES *****");
-            Console.WriteLine("=====================================");
             CriarLista();
-            
             int opcao = 0;
-            do {
+            do
+            {
                 Console.WriteLine("============================================");
                 Console.WriteLine("*** Digite o número da opção que deseja: ***");
                 Console.WriteLine("============================================");
@@ -193,32 +215,80 @@ namespace Aula03Colecoes
                 Console.WriteLine("6 - Função Validar Salário Admissão");
                 Console.WriteLine("7 - Função Validar Nome");
                 Console.WriteLine("8 - Função Obter por Tipo");
+                Console.WriteLine("============================================");
+                Console.WriteLine("============================================");
+
 
                 opcao = int.Parse(Console.ReadLine());
-                switch (opcao) {
+                switch (opcao)
+                {
                     case 1:
+                        funcionando = false;
+                        AdicionarFuncionário();
+                        QuerContinuar();
                         break;
                     case 2:
+                        funcionando = false;
+                        ExibirLista(lista);
+                        QuerContinuar();
                         break;
                     case 3:
+                        funcionando = false;
+                        Console.Write("Digite um nome para pesquisar: ");
+                        string nome = Console.ReadLine();
+                        ObterPorNome(nome);
+                        QuerContinuar();
                         break;
                     case 4:
+                        funcionando = false;
+                        ObterRecentes();
+                        QuerContinuar();
                         break;
                     case 5:
+                        funcionando = false;
+                        ObterEstatisticas();
+                        QuerContinuar();
                         break;
                     case 6:
+                        funcionando = false;
+                        Console.Write("Digite o ID do usuário que deseja validar: ");
+                        int id = int.Parse(Console.ReadLine());
+                        List<Funcionario> listaFiltrada = new List<Funcionario>();
+                        listaFiltrada = lista.FindAll(x => x.Id == id);
+                        if (listaFiltrada.Count == 0)
+                        {
+                            Console.WriteLine("ID não encontrado.");
+                            return;
+                        }
+                        bool valid = ValidarSalarioAdmissao(lista[0]);
+                        if (valid == false) {
+                            Console.WriteLine("Inválido.");
+                        } else {
+                            Console.WriteLine("Válido.");
+                        }
+                        QuerContinuar();
                         break;
                     case 7:
+                        funcionando = false;
+                        Console.Write("Digite um nome para validar: ");
+                        string validarNome = Console.ReadLine();
+                        ValidarNome(validarNome);
+                        QuerContinuar();
                         break;
                     case 8:
+                        funcionando = false;
+                        Console.Write("Selecione:\n1 - CLT\n2 - Aprendiz\n");
+                        int escolha = int.Parse(Console.ReadLine());
+                        ObterPorTipo((escolha == 1) ? TipoFuncionarioEnum.CLT : (escolha == 2) ? TipoFuncionarioEnum.Aprendiz : TipoFuncionarioEnum.Invalido);
+                        QuerContinuar();
                         break;
                     default:
+                        funcionando = false;
                         Console.WriteLine("Saindo do sistema...");
                         break;
                 }
-            } while(opcao > 0 && opcao < 9);
+            } while (funcionando);
         }
-
     }
 
 }
